@@ -13,6 +13,7 @@ import { ChapterActions } from "./_components/chatper-actions";
 import { auth } from "@clerk/nextjs/server";
 import Lecture from "@/models/Lecture";
 import Milestone from "@/models/Milestone";
+import { connectDB } from "@/lib/db";
 
 interface ChapterIdPageProps {
   params: {
@@ -22,18 +23,21 @@ interface ChapterIdPageProps {
 }
 
 const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
+  await connectDB();
   const { courseId, milestonesId } = params;
   const { userId } = auth();
-
+  
   if (!userId) {
     return redirect("/");
   }
-
   
   const milestone = await Milestone.findById(milestonesId);
-  const lecture = await Lecture.find({});
 
-  const isPublished = false
+  const lecture = await Lecture.find({ milestoneId: milestonesId }).sort({
+    position: 1,
+  });
+
+  const isPublished = milestone.isPublished;
 
   return (
     <>
@@ -62,12 +66,12 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
               Complete all fields
             </span>
           </div>
-          {/* <ChapterActions
+          <ChapterActions
             disabled={!isPublished}
             courseId={courseId}
-            chapterId={milestonesId}
+            milestoneId={milestonesId}
             isPublished={isPublished}
-          /> */}
+          />
         </div>
         {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div className="space-y-4">

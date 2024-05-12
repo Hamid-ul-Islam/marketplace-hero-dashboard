@@ -6,11 +6,8 @@ const lectureSchema = new Schema(
     title: String,
     videoUrl: String,
     milestoneId: String,
+    position: Number,
     isPublished: { type: Boolean, default: false },
-    UserProgress: {
-      type: Schema.Types.ObjectId,
-      ref: "UserProgress",
-    },
   },
   {
     timestamps: true,
