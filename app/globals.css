@@ -66,6 +66,10 @@
     }
   }
 
+  .ql-container {
+  font-size: 16px !important;
+}
+
   @layer base {
     * {
       @apply border-border;

@@ -4,10 +4,7 @@ import { model, models, Schema } from "mongoose";
 const submissionSchema = new Schema(
   {
     title: String,
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
+    userId: String,
     submissionUrl: String,
     marks: Number,
   },

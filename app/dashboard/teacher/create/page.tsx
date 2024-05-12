@@ -42,7 +42,7 @@ const CreatePage = () => {
       //toast.success(`Course ${values.title} created successfully`);
       const response = await axios.post("/api/courses", values);
 
-      router.push(`/teacher/courses/${response.data.id}`);
+      router.push(`/dashboard/teacher/courses/${response.data._id}`);
     } catch (error: any) {
       if (error.response) {
         // The request was made and the server responded with a status code

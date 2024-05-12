@@ -1,7 +1,7 @@
-import React from 'react'
+import { auth } from "@clerk/nextjs/server";
+import React from "react";
 
 export default function Dashboard() {
-  return (
-    <div>page</div>
-  )
+  const { userId } = auth();
+  return <div>{userId}</div>;
 }

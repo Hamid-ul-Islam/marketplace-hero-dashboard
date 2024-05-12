@@ -7,6 +7,8 @@ const milestoneSchema = new Schema(
     description: String,
     isPublished: { type: Boolean, default: false },
     imageUrl: String,
+    courseId: String,
+    position: Number,
     lectures: {
       type: Schema.Types.ObjectId,
       ref: "Lecture",
@@ -14,7 +16,7 @@ const milestoneSchema = new Schema(
     assignments: {
       type: Schema.Types.ObjectId,
       ref: "Assignment",
-    }
+    },
   },
   {
     timestamps: true,

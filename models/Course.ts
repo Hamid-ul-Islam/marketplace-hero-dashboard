@@ -8,7 +8,9 @@ const courseSchema = new Schema(
     isPublished: { type: Boolean, default: false },
     imageUrl: [String],
 
-    userId: {
+    userId: String,
+
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },

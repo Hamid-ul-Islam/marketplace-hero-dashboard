@@ -6,10 +6,7 @@ const purchaseSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Course",
     },
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
+    userId: String,
     paymentId: String,
     paymentMethod: String,
   },
