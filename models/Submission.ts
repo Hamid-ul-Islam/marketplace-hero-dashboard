@@ -6,6 +6,7 @@ const submissionSchema = new Schema(
     title: String,
     userId: String,
     submissionUrl: String,
+    assignmentId:String,
     marks: Number,
   },
   {

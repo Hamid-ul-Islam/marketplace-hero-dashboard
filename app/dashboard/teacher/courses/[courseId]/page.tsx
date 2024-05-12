@@ -77,7 +77,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <h1 className="text-2xl font-medium">Course setup</h1>
             <span className="text-sm text-slate-700">
               {/* Complete all fields {completionText} */}
-              Complete all fields 2
+              Complete all fields 5
             </span>
           </div>
           <Actions
@@ -95,18 +95,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <TitleForm initialData={course} courseId={course._id} />
             <DescriptionForm initialData={course} courseId={course._id} />
             <ImageForm initialData={course} courseId={course._id} />
-            {/* <CategoryForm
-              initialData={course}
-              courseId={course.id}
-              options={categories.map((category) => ({
-                label: category.name,
-                value: category.id,
-              }))}
-            /> */}
 
-            <div className="mt-6 border bg-slate-100 rounded-md p-4 dark:bg-gray-800">
-              Category
-            </div>
           </div>
           <div className="space-y-6">
             <div>
@@ -128,7 +117,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                 <IconBadge icon={File} />
                 <h2 className="text-xl">Resources & Attachments</h2>
               </div>
-              {/* <AttachmentForm initialData={course} courseId={course._id} /> */}
+              <AttachmentForm initialData={course} courseId={course._id} />
             </div>
           </div>
         </div>

@@ -3,12 +3,9 @@ import { Schema, model, models } from "mongoose";
 
 const userProgressSchema = new Schema(
   {
+    lectureId: String,
     userId: String,
     isCompleted: { type: Boolean, default: false },
-    lectureId: {
-      type: Schema.Types.ObjectId,
-      ref: "Lecture",
-    },
   },
   {
     timestamps: true,
