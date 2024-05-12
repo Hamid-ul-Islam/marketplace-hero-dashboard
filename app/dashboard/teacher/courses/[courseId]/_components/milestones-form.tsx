@@ -5,7 +5,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Loader2, PlusCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +20,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { MilestonesList } from "./milestones-list";
-import { getMilestones } from "@/lib/getMilestones";
 
 interface MilestonesFormProps {
   milestones: any;
@@ -62,8 +61,8 @@ export const MilestonesForm = ({
       );
       toast.success("Milestones created");
       toggleCreating();
-      console.log(datas.data)
-      setMilestoneData((prev:typeof milestoneData) => [...prev, datas.data]);
+      console.log(datas.data);
+      setMilestoneData((prev: typeof milestoneData) => [...prev, datas.data]);
     } catch {
       toast.error("Something went wrong");
     }
