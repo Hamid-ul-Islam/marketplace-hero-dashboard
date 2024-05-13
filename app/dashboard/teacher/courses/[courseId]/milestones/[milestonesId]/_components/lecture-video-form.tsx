@@ -98,9 +98,6 @@ export const LectureVideoForm = ({
     }
   };
 
-  const onEdit = (id: string) => {
-    router.push(`/dashboard/teacher/courses/${courseId}/milestones/${id}`);
-  };
   return (
     <div className="relative mt-6 border bg-slate-100 rounded-md p-4 dark:bg-gray-800">
       {isUpdating && (
@@ -174,7 +171,7 @@ export const LectureVideoForm = ({
             !lectureData?.length && "text-slate-500 italic"
           )}
         >
-          {!lectureData?.length && "No Milestones"}
+          {!lectureData?.length && "No Lectures"}
           <LecturessList
             onReorder={onReorder}
             item={lectureData}

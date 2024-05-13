@@ -89,12 +89,12 @@ export const AssignmentDescriptionForm = ({
         <div
           className={cn(
             "text-sm mt-2",
-            !initialData.description && "text-slate-500 italic"
+            !initialData?.description && "text-slate-500 italic"
           )}
         >
-          {!initialData.description && "No description"}
-          {initialData.description && (
-            <Preview value={initialData.description} />
+          {!initialData?.description && "No description"}
+          {initialData?.description && (
+            <Preview value={initialData?.description} />
           )}
         </div>
       )}
