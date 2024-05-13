@@ -22,6 +22,8 @@ import { Button } from "@/components/ui/button";
 interface AssignmentFormProps {
   initialData: {
     title: string;
+    marks: any;
+    assignmentUrl: string;
   };
   courseId: string;
   milestoneId: string;
@@ -31,6 +33,10 @@ interface AssignmentFormProps {
 const formSchema = z.object({
   title: z.string().min(1, {
     message: "Title is required",
+  }),
+  marks: z.string().min(1, { message: "Marks is required" }),
+  assignmentUrl: z.string().min(1, {
+    message: "Link is required",
   }),
 });
 
@@ -91,27 +97,49 @@ export const AssignmentTitleForm = ({
   return (
     <div className="mt-6 bg-slate-100 rounded-md p-4 dark:bg-gray-800">
       <div className="font-medium flex items-center justify-between">
-        Assignment Title
+        Assignment Form
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit title
+              Edit Assignment
             </>
           )}
         </Button>
       </div>
       {!isEditing && (
-        <p className="text-sm mt-2 dark:text-gray-300">{initialData?.title}</p>
+        <div>
+          <p className="font-medium mt-2">Title</p>
+          <p className="text-sm mt-1 dark:text-gray-300">
+            {initialData?.title || (
+              <span className="text-sm text-slate-500 italic">no-title</span>
+            )}
+          </p>
+          <p className="font-medium mt-4">Marks</p>
+          <p className="text-sm mt-1 dark:text-gray-300">
+            {initialData?.marks || (
+              <span className="text-sm text-slate-500 italic">no-marks</span>
+            )}
+          </p>
+          <p className="font-medium mt-4">Assignment Link</p>
+          <p className="text-sm mt-1 dark:text-gray-300">
+            {initialData?.assignmentUrl || (
+              <span className="text-sm text-slate-500 italic">
+                no-assignmentUrl
+              </span>
+            )}
+          </p>
+        </div>
       )}
       {isEditing && (
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 mt-4 dark:text-gray-300"
+            className="space-y-2 mt-4 dark:text-gray-300"
           >
+            <p className="font-medium">Title</p>
             <FormField
               control={form.control}
               name="title"
@@ -121,6 +149,40 @@ export const AssignmentTitleForm = ({
                     <Input
                       disabled={isSubmitting}
                       placeholder="e.g. 'Portfolio Project'"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <p className="font-medium">Marks</p>
+            <FormField
+              control={form.control}
+              name="marks"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="e.g. '100'"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <p className="font-medium">Assignment Link</p>
+            <FormField
+              control={form.control}
+              name="assignmentUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="e.g. 'https://github.com/...'"
                       {...field}
                     />
                   </FormControl>
