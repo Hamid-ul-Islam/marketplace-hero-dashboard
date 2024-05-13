@@ -1,12 +1,13 @@
-import { auth } from "@clerk/nextjs";
+import { connectDB } from "@/lib/db";
+import Milestone from "@/models/Milestone";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-
-import { db } from "@/lib/db";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string; chapterId: string } }
+  { params }: { params: { courseId: string; milestoneId: string } }
 ) {
+  await connectDB();
   try {
     const { userId } = auth();
 
@@ -14,48 +15,15 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const ownCourse = await db.course.findUnique({
-      where: {
-        id: params.courseId,
-        userId,
-      },
-    });
+    const publishedMilestone = await Milestone.findByIdAndUpdate(
+      params.milestoneId,
+      { isPublished: false },
+      { new: true }
+    );
 
-    if (!ownCourse) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    const unpublishedChapter = await db.chapter.update({
-      where: {
-        id: params.chapterId,
-        courseId: params.courseId,
-      },
-      data: {
-        isPublished: false,
-      },
-    });
-
-    const publishedChaptersInCourse = await db.chapter.findMany({
-      where: {
-        courseId: params.courseId,
-        isPublished: true,
-      },
-    });
-
-    if (!publishedChaptersInCourse.length) {
-      await db.course.update({
-        where: {
-          id: params.courseId,
-        },
-        data: {
-          isPublished: false,
-        },
-      });
-    }
-
-    return NextResponse.json(unpublishedChapter);
+    return NextResponse.json(publishedMilestone);
   } catch (error) {
-    console.log("[CHAPTER_UNPUBLISH]", error);
+    console.log("[CHAPTER_PUBLISH]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

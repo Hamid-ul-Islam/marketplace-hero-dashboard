@@ -2,18 +2,20 @@ import React from "react";
 import { redirect } from "next/navigation";
 
 import Link from "next/link";
-import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
+import { ArrowLeft, Eye, LayoutDashboard, Video, NotepadText} from "lucide-react";
 import { IconBadge } from "@/components/icon-badge";
 import { ChapterTitleForm } from "./_components/chatper-title-form";
 import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
 import { ChapterVideoForm } from "./_components/chapter-video-form";
 import { Banner } from "@/components/banner";
-import { ChapterActions } from "./_components/chatper-actions";
 import { auth } from "@clerk/nextjs/server";
 import Lecture from "@/models/Lecture";
 import Milestone from "@/models/Milestone";
 import { connectDB } from "@/lib/db";
+import { MilestoneActions } from "./_components/milestone-actions";
+import { MilestoneTitleForm } from "./_components/milestone-title-form";
+import { MilestoneDescriptionForm } from "./_components/milestone-description-form";
 
 interface ChapterIdPageProps {
   params: {
@@ -26,11 +28,11 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
   await connectDB();
   const { courseId, milestonesId } = params;
   const { userId } = auth();
-  
+
   if (!userId) {
     return redirect("/");
   }
-  
+
   const milestone = await Milestone.findById(milestonesId);
 
   const lecture = await Lecture.find({ milestoneId: milestonesId }).sort({
@@ -66,53 +68,60 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
               Complete all fields
             </span>
           </div>
-          <ChapterActions
+          <MilestoneActions
             disabled={!isPublished}
             courseId={courseId}
             milestoneId={milestonesId}
             isPublished={isPublished}
           />
         </div>
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div className="space-y-4">
             <div>
               <div className="flex items-ceenter gap-x-2">
                 <IconBadge icon={LayoutDashboard} />
-                <h2 className="text-xl font-medium">Customize your milestone</h2>
+                <h2 className="text-xl font-medium">
+                  Customize your milestone
+                </h2>
               </div>
-              <ChapterTitleForm
-                initialData={chapter}
+              <MilestoneTitleForm
+                initialData={milestone}
                 courseId={params.courseId}
-                chapterId={params.chapterId}
+                milestoneId={params.milestonesId}
               />
-              <ChapterDescriptionForm
-                initialData={chapter}
+              <MilestoneDescriptionForm
+                initialData={milestone}
                 courseId={params.courseId}
-                chapterId={params.chapterId}
+                milestoneId={params.milestonesId}
               />
             </div>
             <div className="flex items-center gap-x-2">
-              <IconBadge icon={Eye} />
-              <h2 className="text-xl font-medium">Access Settings</h2>
+              <IconBadge icon={NotepadText} />
+              <h2 className="text-xl font-medium">Assignments</h2>
             </div>
-            <ChapterAccessForm
+              <MilestoneTitleForm
+                initialData={milestone}
+                courseId={params.courseId}
+                milestoneId={params.milestonesId}
+              />
+            {/* <ChapterAccessForm
               initialData={chapter}
               courseId={params.courseId}
               chapterId={params.chapterId}
-            />
+            /> */}
           </div>
           <div className="space-y-4">
             <div className="flex items-center gap-x-2">
               <IconBadge icon={Video} />
-              <h2 className="text-xl font-medium">Add a video</h2>
+              <h2 className="text-xl font-medium">Add a Lecture</h2>
             </div>
-            <ChapterVideoForm
+            {/* <ChapterVideoForm
               initialData={chapter}
               courseId={params.courseId}
               chapterId={params.chapterId}
-            />
+            /> */}
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   );
