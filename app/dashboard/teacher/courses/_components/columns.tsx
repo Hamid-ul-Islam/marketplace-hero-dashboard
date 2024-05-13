@@ -1,8 +1,6 @@
-"use client"
-
-import { Course } from "@prisma/client"
-import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react"
+"use client";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -10,14 +8,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 // 6:47:00 in Build a Course & LMS Platform:
 // https://youtu.be/Big_aFLmekI?t=24446
-export const columns: ColumnDef<Course>[] = [
+export const columns: ColumnDef<any>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => {
@@ -29,7 +27,7 @@ export const columns: ColumnDef<Course>[] = [
           Title
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -43,17 +41,17 @@ export const columns: ColumnDef<Course>[] = [
           Price
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
       const price = parseFloat(row.getValue("price") || "0");
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "USD"
+        currency: "BDT",
       }).format(price);
 
-      return <div>{formatted}</div>
-    }
+      return <div>{formatted}</div>;
+    },
   },
   {
     accessorKey: "isPublished",
@@ -66,25 +64,22 @@ export const columns: ColumnDef<Course>[] = [
           Published
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
       const isPublished = row.getValue("isPublished") || false;
 
       return (
-        <Badge className={cn(
-          "bg-slate-500",
-          isPublished && "bg-sky-700"
-        )}>
+        <Badge className={cn("bg-slate-500", isPublished && "bg-sky-700")}>
           {isPublished ? "Published" : "Draft"}
         </Badge>
-      )
-    }
+      );
+    },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const { id } = row.original;
+      const { _id } = row.original;
 
       return (
         <DropdownMenu>
@@ -95,7 +90,7 @@ export const columns: ColumnDef<Course>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <Link href={`/teacher/courses/${id}`}>
+            <Link href={`/dashboard/teacher/courses/${_id}`}>
               <DropdownMenuItem>
                 <Pencil className="h-4 w-4 mr-2" />
                 Edit
@@ -106,4 +101,4 @@ export const columns: ColumnDef<Course>[] = [
       );
     },
   },
-]
+];
