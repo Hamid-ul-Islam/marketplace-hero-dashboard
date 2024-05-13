@@ -793,6 +793,13 @@
     fast-check "^3.18.0"
     std-env "^3.7.0"
 
+"@vidstack/react@^1.11.21":
+  version "1.11.21"
+  resolved "https://registry.yarnpkg.com/@vidstack/react/-/react-1.11.21.tgz#a4ed0a60fb461f4d50d26e03598b1736c1f0c600"
+  integrity sha512-eaMh8raSJw8L523UtmooC7IkBxMriny9X1LMk0qsJ1oZ+JGjvgLEYTPkdyLsDIJjrP4hmeeK+12kPZepHSC1pw==
+  dependencies:
+    media-captions "^1.0.1"
+
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz"
@@ -2452,6 +2459,11 @@ map-obj@^4.1.0:
   version "4.3.0"
   resolved "https://registry.npmjs.org/map-obj/-/map-obj-4.3.0.tgz"
   integrity sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==
+
+media-captions@^1.0.1:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/media-captions/-/media-captions-1.0.3.tgz#e766d1e7cb7e32a2e43008541e59eab4c3580016"
+  integrity sha512-y2Qi5rqjwgH97zoko1vzu5Q6nnS0KzEQSvd4NOjnFym9JqnFb5VSsUg21RNb5cQ/nhCFJ0wz/XK+2uMwFCr6TQ==
 
 memoize-one@^6.0.0:
   version "6.0.0"

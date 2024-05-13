@@ -20,6 +20,7 @@
     "@radix-ui/react-label": "^2.0.2",
     "@tanstack/react-table": "^8.17.0",
     "@uploadthing/react": "^6.5.3",
+    "@vidstack/react": "^1.11.21",
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

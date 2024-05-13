@@ -17,9 +17,12 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const chapter = await Lecture.findByIdAndUpdate(params.lectureId, values);
+    const updatedLecture = await Lecture.findByIdAndUpdate(
+      params.lectureId,
+      values
+    );
 
-    return NextResponse.json(chapter);
+    return NextResponse.json(updatedLecture);
   } catch (error) {
     console.log("[COURSES_CHAPTER_ID]", error);
     return new NextResponse("Internal Error", { status: 500 });

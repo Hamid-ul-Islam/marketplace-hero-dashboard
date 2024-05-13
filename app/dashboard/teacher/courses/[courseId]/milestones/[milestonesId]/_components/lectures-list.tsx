@@ -77,7 +77,7 @@ export const LecturessList = ({
               >
                 {(provided) => (
                   <div
-                    className={`flex items-center gap-x-2 bg-gray-200 border-gray-200 border text-gray-700 rounded-md mb-4 text-sm
+                    className={`flex items-center gap-x-2 bg-gray-200 border-gray-200 border text-gray-700 rounded-md mb-4  text-sm
                                             ${
                                               lecture.isPublished &&
                                               "bg-blue-100 border-blue-200 text-blue-700"
@@ -112,6 +112,7 @@ export const LecturessList = ({
                       courseId={courseId}
                       milestoneId={milestoneId}
                     />
+                    
                   </div>
                 )}
               </Draggable>
