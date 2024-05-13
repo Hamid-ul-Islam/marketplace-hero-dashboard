@@ -2,7 +2,13 @@ import React from "react";
 import { redirect } from "next/navigation";
 
 import Link from "next/link";
-import { ArrowLeft, Eye, LayoutDashboard, Video, NotepadText} from "lucide-react";
+import {
+  ArrowLeft,
+  Eye,
+  LayoutDashboard,
+  Video,
+  NotepadText,
+} from "lucide-react";
 import { IconBadge } from "@/components/icon-badge";
 import { ChapterTitleForm } from "./_components/chatper-title-form";
 import { ChapterDescriptionForm } from "./_components/chapter-description-form";
@@ -16,6 +22,9 @@ import { connectDB } from "@/lib/db";
 import { MilestoneActions } from "./_components/milestone-actions";
 import { MilestoneTitleForm } from "./_components/milestone-title-form";
 import { MilestoneDescriptionForm } from "./_components/milestone-description-form";
+import { AssignmentTitleForm } from "./_components/assignment-title-form";
+import Assignment from "@/models/Assignment";
+import { AssignmentDescriptionForm } from "./_components/assignment-description-form";
 
 interface ChapterIdPageProps {
   params: {
@@ -35,9 +44,7 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
 
   const milestone = await Milestone.findById(milestonesId);
 
-  const lecture = await Lecture.find({ milestoneId: milestonesId }).sort({
-    position: 1,
-  });
+  const assignment = await Assignment.findOne({ milestoneId: milestonesId });
 
   const isPublished = milestone.isPublished;
 
@@ -97,13 +104,20 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
             </div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={NotepadText} />
-              <h2 className="text-xl font-medium">Assignments</h2>
+              <h2 className="text-xl font-medium">Assignment</h2>
             </div>
-              <MilestoneTitleForm
-                initialData={milestone}
-                courseId={params.courseId}
-                milestoneId={params.milestonesId}
-              />
+            <AssignmentTitleForm
+              initialData={assignment}
+              assignmentId={assignment?._id}
+              milestoneId={params.milestonesId}
+              courseId={params.courseId}
+            />
+            <AssignmentDescriptionForm
+              initialData={assignment}
+              assignmentId={assignment?._id}
+              milestoneId={params.milestonesId}
+              courseId={params.courseId}
+            />
             {/* <ChapterAccessForm
               initialData={chapter}
               courseId={params.courseId}

@@ -19,13 +19,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-interface MilestoneTitleFormProps {
+interface AssignmentFormProps {
   initialData: {
     title: string;
   };
   courseId: string;
   milestoneId: string;
-};
+  assignmentId: string;
+}
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -33,11 +34,12 @@ const formSchema = z.object({
   }),
 });
 
-export const MilestoneTitleForm = ({
+export const AssignmentTitleForm = ({
   initialData,
   courseId,
   milestoneId,
-}: MilestoneTitleFormProps) => {
+  assignmentId,
+}: AssignmentFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -53,8 +55,19 @@ export const MilestoneTitleForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      if (!assignmentId) {
+        await axios.post(
+          `/api/courses/${courseId}/milestones/${milestoneId}/assignment`,
+          values
+        );
+        toast.success("Assignment title created");
+        toggleEdit();
+        router.refresh();
+        return;
+      }
+
       await axios.patch(
-        `/api/courses/${courseId}/milestones/${milestoneId}`,
+        `/api/courses/${courseId}/milestones/${milestoneId}/${assignmentId}`,
         values
       );
       toast.success("Milestone title updated");
@@ -78,7 +91,7 @@ export const MilestoneTitleForm = ({
   return (
     <div className="mt-6 bg-slate-100 rounded-md p-4 dark:bg-gray-800">
       <div className="font-medium flex items-center justify-between">
-        Milestone Title
+        Assignment Title
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
@@ -107,7 +120,7 @@ export const MilestoneTitleForm = ({
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced web development'"
+                      placeholder="e.g. 'Portfolio Project'"
                       {...field}
                     />
                   </FormControl>
@@ -126,4 +139,3 @@ export const MilestoneTitleForm = ({
     </div>
   );
 };
-
