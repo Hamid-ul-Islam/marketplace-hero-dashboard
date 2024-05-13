@@ -10,10 +10,7 @@ import {
   NotepadText,
 } from "lucide-react";
 import { IconBadge } from "@/components/icon-badge";
-import { ChapterTitleForm } from "./_components/chatper-title-form";
-import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
-import { ChapterVideoForm } from "./_components/chapter-video-form";
 import { Banner } from "@/components/banner";
 import { auth } from "@clerk/nextjs/server";
 import Lecture from "@/models/Lecture";
@@ -25,6 +22,7 @@ import { MilestoneDescriptionForm } from "./_components/milestone-description-fo
 import { AssignmentTitleForm } from "./_components/assignment-title-form";
 import Assignment from "@/models/Assignment";
 import { AssignmentDescriptionForm } from "./_components/assignment-description-form";
+import LectureVideoForm from "./_components/lecture-video-form";
 
 interface ChapterIdPageProps {
   params: {
@@ -45,6 +43,16 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
   const milestone = await Milestone.findById(milestonesId);
 
   const assignment = await Assignment.findOne({ milestoneId: milestonesId });
+
+  const lectures: {
+    _id: string;
+    title: string;
+    videoId: string;
+    position: number;
+    isPublished: boolean;
+  }[] = await Lecture.find({ milestoneId: milestonesId }).sort({
+    position: 1,
+  });
 
   const isPublished = milestone.isPublished;
 
@@ -85,7 +93,7 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div className="space-y-4">
             <div>
-              <div className="flex items-ceenter gap-x-2">
+              <div className="flex items-center gap-x-2">
                 <IconBadge icon={LayoutDashboard} />
                 <h2 className="text-xl font-medium">
                   Customize your milestone
@@ -127,8 +135,13 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
           <div className="space-y-4">
             <div className="flex items-center gap-x-2">
               <IconBadge icon={Video} />
-              <h2 className="text-xl font-medium">Add a Lecture</h2>
+              <h2 className="text-xl font-medium">Lecture Videos</h2>
             </div>
+            <LectureVideoForm
+              lecture={lectures}
+              milestoneId={params.milestonesId}
+              courseId={params.courseId}
+            />
             {/* <ChapterVideoForm
               initialData={chapter}
               courseId={params.courseId}

@@ -6,36 +6,43 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { Grip, Pencil } from "lucide-react";
+import { Grip } from "lucide-react";
+import { LectureEditForm } from "./lecture-edit-form";
 
-import { Badge } from "@/components/ui/badge";
-
-interface MilestonesListProps {
-  items: any;
+interface LecturesListProps {
+  item: {
+    _id: string;
+    title: string;
+    videoId: string;
+    position: number;
+    isPublished: boolean;
+  }[];
   onReorder: (updateData: { id: string; position: number }[]) => void;
-  onEdit: (id: string) => void;
+  courseId: string;
+  milestoneId: string;
 }
 
-export const MilestonesList = ({
-  items,
+export const LecturessList = ({
+  item,
   onReorder,
-  onEdit,
-}: MilestonesListProps) => {
+  courseId,
+  milestoneId,
+}: LecturesListProps) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [milestones, setMilestones] = useState(items);
+  const [lectures, setLectures] = useState(item);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   useEffect(() => {
-    setMilestones(items);
-  }, [items]);
+    setLectures(item);
+  }, [item]);
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
-    const items = Array.from(milestones);
+    const items = Array.from(lectures);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
@@ -44,7 +51,7 @@ export const MilestonesList = ({
 
     const updatedMilestones = items.slice(startIndex, endIndex + 1);
 
-    setMilestones(items);
+    setLectures(items);
 
     const bulkUpdateData = updatedMilestones.map((milestone) => ({
       id: milestone._id,
@@ -59,25 +66,25 @@ export const MilestonesList = ({
   }
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="milestones">
+      <Droppable droppableId="lectures">
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
-            {milestones.map((milestone, index) => (
+            {lectures.map((lecture, index) => (
               <Draggable
-                key={milestone._id}
-                draggableId={milestone._id}
+                key={lecture._id}
+                draggableId={lecture._id}
                 index={index}
               >
                 {(provided) => (
                   <div
                     className={`flex items-center gap-x-2 bg-gray-200 border-gray-200 border text-gray-700 rounded-md mb-4 text-sm
                                             ${
-                                              milestone.isPublished &&
+                                              lecture.isPublished &&
                                               "bg-blue-100 border-blue-200 text-blue-700"
                                             }
                                             dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300
                                             dark:${
-                                              milestone.isPublished &&
+                                              lecture.isPublished &&
                                               "bg-blue-800 border-blue-600 text-blue-300"
                                             }
                                         `}
@@ -87,12 +94,12 @@ export const MilestonesList = ({
                     <div
                       className={`px-2 py-3 border-r border-r-gray-200 hover:bg-gray-300 rounded-l-md transition
                                                 ${
-                                                  milestone.isPublished &&
+                                                  lecture.isPublished &&
                                                   "border-r-blue-200 hover:bg-blue-200"
                                                 }
                                                 dark:border-r-slate-800 dark:hover:bg-slate-700
                                                 dark:${
-                                                  milestone.isPublished &&
+                                                  lecture.isPublished &&
                                                   "border-r-blue-600 hover:bg-blue-800"
                                                 }
                                             `}
@@ -100,29 +107,11 @@ export const MilestonesList = ({
                     >
                       <Grip className="h-5 w-5" />
                     </div>
-                    {milestone.title}
-                    <div className="ml-auto pr-2 flex items-center gap-x-2">
-                      {/* {milestone.isFree && <Badge>Free</Badge>} */}
-                      <Badge
-                        className={`bg-gray-500
-                                                ${
-                                                  milestone.isPublished &&
-                                                  "bg-sky-700"
-                                                }
-                                                dark:bg-slate-500
-                                                dark:${
-                                                  milestone.isPublished &&
-                                                  "bg-sky-700"
-                                                }
-                                                `}
-                      >
-                        {milestone.isPublished ? "Published" : "Draft"}
-                      </Badge>
-                      <Pencil
-                        onClick={() => onEdit(milestone._id)}
-                        className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
-                      />
-                    </div>
+                    <LectureEditForm
+                      initialData={lecture}
+                      courseId={courseId}
+                      milestoneId={milestoneId}
+                    />
                   </div>
                 )}
               </Draggable>
