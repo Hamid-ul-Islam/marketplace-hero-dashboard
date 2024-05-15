@@ -52,3 +52,20 @@ export async function POST(
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { assignmentId: string; milestoneId: string } }
+) {
+  try {
+    await connectDB();
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    await Assignment.findByIdAndDelete(params.assignmentId);
+  } catch (error) {
+    console.log("[COURSES_Assignment_ID]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}

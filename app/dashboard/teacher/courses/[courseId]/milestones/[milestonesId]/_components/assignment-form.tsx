@@ -18,12 +18,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { DatePickerWithPresets } from "@/components/ui/datePicker";
+import { format } from "date-fns";
 
 interface AssignmentFormProps {
   initialData: {
     title: string;
     marks: any;
     assignmentUrl: string;
+    dueDate: Date;
   };
   courseId: string;
   milestoneId: string;
@@ -34,7 +37,8 @@ const formSchema = z.object({
   title: z.string().min(1, {
     message: "Title is required",
   }),
-  marks: z.string().min(1, { message: "Marks is required" }),
+  marks: z.any(),
+  dueDate: z.date(),
   assignmentUrl: z.string().min(1, {
     message: "Link is required",
   }),
@@ -131,6 +135,12 @@ export const AssignmentTitleForm = ({
               </span>
             )}
           </p>
+          <p className="font-medium mt-4">Due Date</p>
+          <p className="text-sm mt-1 dark:text-gray-300">
+            {initialData?.dueDate && format(initialData?.dueDate, "PPP") || (
+              <span className="text-sm text-slate-500 italic">no-dueDate</span>
+            )}
+          </p>
         </div>
       )}
       {isEditing && (
@@ -184,6 +194,23 @@ export const AssignmentTitleForm = ({
                       disabled={isSubmitting}
                       placeholder="e.g. 'https://github.com/...'"
                       {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <p className="font-medium">Due Date</p>
+            <FormField
+              control={form.control}
+              name="dueDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <DatePickerWithPresets
+                      disabled={isSubmitting}
+                      onChange={field.onChange}
+                      value={field.value}
                     />
                   </FormControl>
                   <FormMessage />

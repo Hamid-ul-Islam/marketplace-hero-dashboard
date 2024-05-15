@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Video,
   NotepadText,
+  Trash,
 } from "lucide-react";
 import { IconBadge } from "@/components/icon-badge";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
@@ -19,10 +20,13 @@ import { connectDB } from "@/lib/db";
 import { MilestoneActions } from "./_components/milestone-actions";
 import { MilestoneTitleForm } from "./_components/milestone-title-form";
 import { MilestoneDescriptionForm } from "./_components/milestone-description-form";
-import { AssignmentTitleForm } from "./_components/assignment-title-form";
+import { AssignmentTitleForm } from "./_components/assignment-form";
 import Assignment from "@/models/Assignment";
 import { AssignmentDescriptionForm } from "./_components/assignment-description-form";
 import LectureVideoForm from "./_components/lecture-video-form";
+import { Button } from "@/components/ui/button";
+import { ConfirmModal } from "@/components/modals/confirm-modal";
+import { AssignmentActions } from "./_components/assignmentAction";
 
 interface ChapterIdPageProps {
   params: {
@@ -55,6 +59,14 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
   });
 
   const isPublished = milestone.isPublished;
+
+  async function handleAssignmetDelete() {
+    try {
+      await Assignment.findByIdAndDelete(assignment._id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -110,9 +122,18 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
                 milestoneId={params.milestonesId}
               />
             </div>
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={NotepadText} />
-              <h2 className="text-xl font-medium">Assignment</h2>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={NotepadText} />
+                <h2 className="text-xl font-medium">Assignment</h2>
+              </div>
+              <AssignmentActions
+                assignmentId={assignment?._id}
+                isPublished={assignment?.isPublished}
+                disabled={!assignment?._id}
+                milestoneId={params.milestonesId}
+                courseId={params.courseId}
+              />
             </div>
             <AssignmentTitleForm
               initialData={assignment}
@@ -126,11 +147,7 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
               milestoneId={params.milestonesId}
               courseId={params.courseId}
             />
-            {/* <ChapterAccessForm
-              initialData={chapter}
-              courseId={params.courseId}
-              chapterId={params.chapterId}
-            /> */}
+
           </div>
           <div className="space-y-4">
             <div className="flex items-center gap-x-2">
@@ -141,12 +158,7 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
               lecture={lectures}
               milestoneId={params.milestonesId}
               courseId={params.courseId}
-            />
-            {/* <ChapterVideoForm
-              initialData={chapter}
-              courseId={params.courseId}
-              chapterId={params.chapterId}
-            /> */}
+            />            
           </div>
         </div>
       </div>
