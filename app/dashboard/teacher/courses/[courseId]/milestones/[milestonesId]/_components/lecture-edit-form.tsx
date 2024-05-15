@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Pencil, Eye, EyeOff } from "lucide-react";
+import { Pencil, Eye, EyeOff, Video, VideoOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -45,7 +45,7 @@ export const LectureEditForm = ({
   milestoneId,
 }: LectureEditFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [lectureData, setLectureData] = useState(initialData);
+  const [lectureData, setLectureData] = useState<any>(initialData);
   const [isPreviewing, setIsPreviewing] = useState(false);
 
   const togglePreview = () => setIsPreviewing((current) => !current);
@@ -77,25 +77,47 @@ export const LectureEditForm = ({
 
       toggleEdit();
     } catch (error: any) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        toast.error(`Server responded with ${error.response.status} error`);
-      } else if (error.request) {
-        // The request was made but no response was received
-        toast.error("No response received from server");
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        toast.error(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`);
+    }
+  };
+
+  const togglePublishLecture = async ({
+    lectureId,
+    isPublished,
+  }: {
+    lectureId: string;
+    isPublished: boolean;
+  }) => {
+    try {
+      if (isPublished) {
+        const res = await axios.patch(
+          `/api/courses/${courseId}/milestones/${milestoneId}/lecture/${lectureId}/unpublish`
+        );
+        setLectureData(res.data);
+        router.refresh();
+        toast.success("Lecture unpublished");
+        return;
       }
+
+      const res = await axios.patch(
+        `/api/courses/${courseId}/milestones/${milestoneId}/lecture/${lectureId}/publish`
+      );
+      setLectureData(res.data);
+      router.refresh();
+      toast.success("Lecture published");
+    } catch (error: any) {
+      toast.error(`Error: ${error.message}`);
     }
   };
 
   return (
-    <div className={`w-full bg-gray-200 p-2 dark:bg-slate-700 `}>
+    <div className={`w-full bg-gray-200  dark:bg-slate-700 `}>
       {isPreviewing && (
         <div className="flex items-center justify-center py-4">
-          <EyeOff onClick={togglePreview} className="h-6 w-6 cursor-pointer" />
+          <VideoOff
+            onClick={togglePreview}
+            className="h-6 w-6 cursor-pointer"
+          />
         </div>
       )}
       {!isPreviewing && (
@@ -103,19 +125,24 @@ export const LectureEditForm = ({
           <div className="flex items-center justify-between">
             {<div>{lectureData.title}</div>}
             <div className="flex items-center">
-              <Eye
+              <Video
                 onClick={togglePreview}
                 className="h-6 w-6 mr-2 cursor-pointer"
               />
               <Badge
-                onClick={() => {}}
-                className={`bg-gray-500 cursor-pointer ${
-                  lectureData.isPublished && "bg-sky-700"
-                } dark:bg-slate-500 dark:${
-                  lectureData.isPublished && "bg-sky-700"
-                }`}
+                onClick={() =>
+                  togglePublishLecture({
+                    lectureId: lectureData._id,
+                    isPublished: lectureData.isPublished,
+                  })
+                }
+                className={`border  cursor-pointer ${
+                  lectureData.isPublished
+                    ? " bg-green-100 text-green-600 hover:text-green-400 hover:bg-green-100 "
+                    : " bg-red-100 text-red-600 hover:text-red-400 hover:bg-red-100 "
+                } `}
               >
-                {lectureData.isPublished ? "Unpublish" : "Publish"}
+                {lectureData.isPublished ? "Published" : "Unpublished"}
               </Badge>
 
               <Button
@@ -138,7 +165,7 @@ export const LectureEditForm = ({
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-2 mt-4 dark:text-gray-300"
+                className="space-y-2 p-4 dark:text-gray-300"
               >
                 <p className="font-medium">Title</p>
                 <FormField

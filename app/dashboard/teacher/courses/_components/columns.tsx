@@ -70,8 +70,14 @@ export const columns: ColumnDef<any>[] = [
       const isPublished = row.getValue("isPublished") || false;
 
       return (
-        <Badge className={cn("bg-slate-500", isPublished && "bg-sky-700")}>
-          {isPublished ? "Published" : "Draft"}
+        <Badge
+          className={cn(
+            "bg-red-100 text-red-600 hover:text-red-400 hover:bg-red-100",
+            isPublished &&
+              "bg-green-100 text-green-600 hover:text-green-400 hover:bg-green-100 "
+          )}
+        >
+          {isPublished ? "Published" : "Unpublished"}
         </Badge>
       );
     },
@@ -82,22 +88,12 @@ export const columns: ColumnDef<any>[] = [
       const { _id } = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-4 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <Link href={`/dashboard/teacher/courses/${_id}`}>
-              <DropdownMenuItem>
-                <Pencil className="h-4 w-4 mr-2" />
-                Edit
-              </DropdownMenuItem>
-            </Link>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Link href={`/dashboard/teacher/courses/${_id}`}>
+          <Button variant="outline">
+            {/* <Pencil className="h-4 w-4 mr-2" /> */}
+            Edit
+          </Button>
+        </Link>
       );
     },
   },

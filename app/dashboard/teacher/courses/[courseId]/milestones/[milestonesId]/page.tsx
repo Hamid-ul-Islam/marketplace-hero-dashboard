@@ -61,14 +61,6 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
 
   const isPublished = milestone.isPublished;
 
-  async function handleAssignmetDelete() {
-    try {
-      await Assignment.findByIdAndDelete(assignment._id);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   return (
     <>
       {!isPublished && (
@@ -122,34 +114,7 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
                 courseId={params.courseId}
                 milestoneId={params.milestonesId}
               />
-            </div>
-            {/* <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-2">
-                <IconBadge icon={NotepadText} />
-                <h2 className="text-xl font-medium">Assignment</h2>
-              </div>
-              <AssignmentActions
-                assignmentId={assignment?._id}
-                isPublished={assignment?.isPublished}
-                disabled={!assignment?._id}
-                milestoneId={params.milestonesId}
-                courseId={params.courseId}
-              />
-            </div>
-            <AssignmentTitleForm
-              initialData={assignment}
-              assignmentId={assignment?._id}
-              milestoneId={params.milestonesId}
-              courseId={params.courseId}
-            />
-            <AssignmentDescriptionForm
-              initialData={assignment}
-              assignmentId={assignment?._id}
-              milestoneId={params.milestonesId}
-              courseId={params.courseId}
-            /> */}
-
-          
+            </div>          
               <AssignmentSection
                 {...{ courseId, milestoneId: milestonesId, assignment }}
               />
