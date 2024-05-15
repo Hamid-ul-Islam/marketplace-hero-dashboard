@@ -34,7 +34,7 @@ export function DatePickerWithPresets({ value, onChange, disabled }: Props) {
     if (value) {
       setDate(value);
     }
-  }, [value]);
+  }, [value, date]);
 
   return (
     <Popover>
@@ -55,9 +55,9 @@ export function DatePickerWithPresets({ value, onChange, disabled }: Props) {
         className="flex w-auto flex-col space-y-2 p-2"
       >
         <Select
-          onValueChange={(value) =>
-            setDate(addDays(new Date(), parseInt(value)))
-          }
+          onValueChange={(value) => {
+            setDate(addDays(new Date(), parseInt(value)));
+          }}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select" />

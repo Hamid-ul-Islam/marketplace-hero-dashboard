@@ -21,32 +21,32 @@ export const AssignmentActions = ({
   isPublished,
   milestoneId,
   courseId,
-  disabled
+  disabled,
 }: AssignmentActionsProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const onClick = async () => {
-    // try {
-    //   setIsLoading(true);
-    //   if (isPublished) {
-    //     await axios.patch(
-    //       `/api/courses/${courseId}/milestones/${milestoneId}/unpublish`
-    //     );
-    //     toast.success("Chapter unpublished");
-    //   } else {
-    //     await axios.patch(
-    //       `/api/courses/${courseId}/milestones/${milestoneId}/publish`
-    //     );
-    //     toast.success("Milestone published");
-    //   }
-    //   router.refresh();
-    //   return;
-    // } catch {
-    //   toast.error("Something went wrong");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    try {
+      setIsLoading(true);
+      if (isPublished) {
+        await axios.patch(
+          `/api/courses/${courseId}/milestones/${milestoneId}/assignment/${assignmentId}/unpublish`
+        );
+        toast.success("Assignment unpublished");
+      } else {
+        await axios.patch(
+          `/api/courses/${courseId}/milestones/${milestoneId}/assignment/${assignmentId}/publish`
+        );
+        toast.success("Assignment published");
+      }
+      router.refresh();
+      return;
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
   const onDelete = async () => {
     try {
@@ -69,12 +69,17 @@ export const AssignmentActions = ({
   return (
     <div className="flex items-center gap-x-2">
       <Button
+        className={`${
+          isPublished
+            ? " bg-green-100 text-green-600 hover:text-green-400 hover:bg-green-100 "
+            : " bg-red-100 text-red-600 hover:text-red-400 hover:bg-red-100 "
+        } `}
         onClick={onClick}
         disabled={isLoading || disabled}
         variant="outline"
         size="sm"
       >
-        {isPublished ? "Unpublish" : "Publish"}
+        {isPublished ? "Published" : "Unpublished"}
       </Button>
       <ConfirmModal onConfirm={onDelete}>
         <Button disabled={isLoading || disabled}>

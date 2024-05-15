@@ -86,9 +86,12 @@ export const LectureVideoForm = ({
     try {
       setIsUpdating(true);
 
-      await axios.put(`/api/courses/${courseId}/milestones/${milestoneId}/lecture/reorder`, {
-        list: updateData,
-      });
+      await axios.put(
+        `/api/courses/${courseId}/milestones/${milestoneId}/lecture/reorder`,
+        {
+          list: updateData,
+        }
+      );
       toast.success("Lectures reordered");
       router.refresh();
     } catch {
@@ -99,7 +102,7 @@ export const LectureVideoForm = ({
   };
 
   return (
-    <div className="relative mt-6 border bg-slate-100 rounded-md p-4 dark:bg-gray-800">
+    <div className="relative border bg-slate-100 rounded-md p-4 dark:bg-gray-800">
       {isUpdating && (
         <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-m flex items-center justify-center">
           <Loader2 className="animate-spin h-6 w-6 text-sky-700" />
@@ -167,7 +170,7 @@ export const LectureVideoForm = ({
       {!isCreating && (
         <div
           className={cn(
-            "text-sm mt-2",
+            "text-sm",
             !lectureData?.length && "text-slate-500 italic"
           )}
         >

@@ -32,7 +32,7 @@ export const MilestoneActions = ({
         await axios.patch(
           `/api/courses/${courseId}/milestones/${milestoneId}/unpublish`
         );
-        toast.success("Chapter unpublished");
+        toast.success("Milestone unpublished");
       } else {
         await axios.patch(
           `/api/courses/${courseId}/milestones/${milestoneId}/publish`
@@ -64,12 +64,17 @@ export const MilestoneActions = ({
   return (
     <div className="flex items-center gap-x-2">
       <Button
+        className={`${
+          isPublished
+            ? " bg-green-100 text-green-600 hover:text-green-400 hover:bg-green-100 "
+            : " bg-red-100 text-red-600 hover:text-red-400 hover:bg-red-100 "
+        } `}
         onClick={onClick}
         disabled={isLoading}
         variant="outline"
         size="sm"
       >
-        {isPublished ? "Unpublish" : "Publish"}
+        {isPublished ? "Published" : "Unpublished"}
       </Button>
       <ConfirmModal onConfirm={onDelete}>
         <Button disabled={isLoading}>

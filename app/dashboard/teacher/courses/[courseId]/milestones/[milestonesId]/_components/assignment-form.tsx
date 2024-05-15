@@ -70,17 +70,17 @@ export const AssignmentTitleForm = ({
           `/api/courses/${courseId}/milestones/${milestoneId}/assignment`,
           values
         );
-        toast.success("Assignment title created");
+        toast.success("Assignment created");
         toggleEdit();
         router.refresh();
         return;
       }
 
       await axios.patch(
-        `/api/courses/${courseId}/milestones/${milestoneId}/${assignmentId}`,
+        `/api/courses/${courseId}/milestones/${milestoneId}/assignment/${assignmentId}`,
         values
       );
-      toast.success("Milestone title updated");
+      toast.success("Assignment updated");
       toggleEdit();
       router.refresh();
     } catch (error: any) {
