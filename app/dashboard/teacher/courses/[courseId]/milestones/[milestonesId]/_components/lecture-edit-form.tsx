@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Pencil, Eye, EyeOff, Video, VideoOff } from "lucide-react";
+import { Pencil, Eye, EyeOff, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import LectureVideoPreview from "./LectureVideoPreview";
+import { ConfirmModal } from "@/components/modals/confirm-modal";
 
 interface LectureEditFormProps {
   initialData: {
@@ -110,25 +111,39 @@ export const LectureEditForm = ({
     }
   };
 
+  const onDeleteLecture = async (lectureId: string) => {
+    await axios.delete(
+      `/api/courses/${courseId}/milestones/${milestoneId}/lecture/${lectureId}`
+    );
+
+    setLectureData({});
+    router.refresh();
+    toast.success("Lecture deleted");
+  };
+
   return (
     <div className={`w-full bg-gray-200  dark:bg-slate-700 `}>
       {isPreviewing && (
         <div className="flex items-center justify-center py-4">
-          <VideoOff
-            onClick={togglePreview}
-            className="h-6 w-6 cursor-pointer"
-          />
+          <EyeOff onClick={togglePreview} className="h-6 w-6 cursor-pointer" />
         </div>
       )}
       {!isPreviewing && (
         <div>
-          <div className="flex items-center justify-between">
-            {<div>{lectureData.title}</div>}
+          <div className="flex flex-col-reverse lg:flex-row items-center justify-between">
+            {
+              <div className="font-medium pr-2 pb-2 sm:pr-0 sm:pb-0 sm:font-normal">
+                {lectureData.title || <span className="italic text-slate-500">Lecture deleted</span>}
+              </div>
+            }
             <div className="flex items-center">
-              <Video
+              <Eye
                 onClick={togglePreview}
                 className="h-6 w-6 mr-2 cursor-pointer"
               />
+              <ConfirmModal onConfirm={() => onDeleteLecture(lectureData._id)}>
+                <Trash className="w-6 h-6 mr-2 cursor-pointer bg-red-100 rounded-md p-1 text-red-600" />
+              </ConfirmModal>
               <Badge
                 onClick={() =>
                   togglePublishLecture({

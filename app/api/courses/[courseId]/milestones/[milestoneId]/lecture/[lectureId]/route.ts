@@ -24,7 +24,7 @@ export async function PATCH(
 
     return NextResponse.json(updatedLecture);
   } catch (error) {
-    console.log("[COURSES_CHAPTER_ID]", error);
+    console.log("[LECTURE_UPDATE_ID]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
@@ -57,7 +57,31 @@ export async function POST(
 
     return NextResponse.json(lecture);
   } catch (error) {
-    console.log("[COURSES_CHAPTER_ID]", error);
+    console.log("[LECTUR_CREATE_ID]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}
+
+//delete lecture
+export async function DELETE(
+  req: Request,
+  { params }: { params: { lectureId: string; milestoneId: string } }
+) {
+  try {
+    await connectDB();
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const deletedLecture = await Lecture.findByIdAndDelete(
+      params.lectureId,
+    );
+
+    return NextResponse.json(deletedLecture);
+  } catch (error) {
+    console.log("[LECTURE_DELETE_ID]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
