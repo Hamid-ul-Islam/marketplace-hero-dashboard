@@ -110,6 +110,7 @@ export const LecturessList = ({
                       initialData={lecture}
                       courseId={courseId}
                       milestoneId={milestoneId}
+                      setLectures = {setLectures}
                     />
                   </div>
                 )}

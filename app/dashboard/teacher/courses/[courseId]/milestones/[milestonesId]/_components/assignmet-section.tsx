@@ -42,32 +42,30 @@ export default function AssignmentSection({
           <h2 className="text-xl font-medium">Assignment</h2>
         </div>
 
+        {assignment?._id && (
+          <AssignmentActions
+            assignmentId={assignment?._id}
+            isPublished={assignment?.isPublished}
+            disabled={!assignment?._id}
+            milestoneId={milestoneId}
+            courseId={courseId}
+          />
+        )}
+
         <div>
-          {assignment?._id && (
-            <AssignmentActions
-              assignmentId={assignment?._id}
-              isPublished={assignment?.isPublished}
-              disabled={!assignment?._id}
-              milestoneId={milestoneId}
-              courseId={courseId}
-            />
+          {!assignment?._id && (
+            <Button onClick={toggleCreating} variant="outline">
+              {isCreating ? (
+                <>Cancel</>
+              ) : (
+                <>
+                  <PlusCircle className="h-4 w-4 mr-2" />
+                  Add Assignment
+                </>
+              )}
+            </Button>
           )}
         </div>
-      </div>
-
-      <div>
-        {!assignment?._id && (
-          <Button onClick={toggleCreating} variant="outline">
-            {isCreating ? (
-              <>Cancel</>
-            ) : (
-              <>
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Add Assignment
-              </>
-            )}
-          </Button>
-        )}
       </div>
 
       {(assignment?._id || isCreating) && (

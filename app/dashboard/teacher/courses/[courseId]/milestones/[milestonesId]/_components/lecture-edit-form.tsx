@@ -31,6 +31,7 @@ interface LectureEditFormProps {
   };
   courseId: string;
   milestoneId: string;
+  setLectures: (data: any) => void;
 }
 
 const formSchema = z.object({
@@ -44,10 +45,12 @@ export const LectureEditForm = ({
   initialData,
   courseId,
   milestoneId,
+  setLectures,
 }: LectureEditFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [lectureData, setLectureData] = useState<any>(initialData);
   const [isPreviewing, setIsPreviewing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const togglePreview = () => setIsPreviewing((current) => !current);
 
@@ -112,17 +115,24 @@ export const LectureEditForm = ({
   };
 
   const onDeleteLecture = async (lectureId: string) => {
-    await axios.delete(
-      `/api/courses/${courseId}/milestones/${milestoneId}/lecture/${lectureId}`
-    );
-
-    setLectureData({});
-    router.refresh();
-    toast.success("Lecture deleted");
+    try {
+      setIsLoading(true);
+      await axios.delete(
+        `/api/courses/${courseId}/milestones/${milestoneId}/lecture/${lectureId}`
+      );
+      toast.success("Assignment deleted");
+      setLectures((lectures: any) =>
+        lectures.filter((lecture: any) => lecture._id !== lectureId)
+      );
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className={`w-full bg-gray-200  dark:bg-slate-700 `}>
+    <div className={`w-full bg-gray-200  dark:bg-slate-700`}>
       {isPreviewing && (
         <div className="flex items-center justify-center py-4">
           <EyeOff onClick={togglePreview} className="h-6 w-6 cursor-pointer" />
@@ -133,7 +143,9 @@ export const LectureEditForm = ({
           <div className="flex flex-col-reverse lg:flex-row items-center justify-between">
             {
               <div className="font-medium pr-2 pb-2 sm:pr-0 sm:pb-0 sm:font-normal">
-                {lectureData.title || <span className="italic text-slate-500">Lecture deleted</span>}
+                {lectureData.title || (
+                  <span className="italic text-slate-500">Lecture deleted</span>
+                )}
               </div>
             }
             <div className="flex items-center">

@@ -52,13 +52,10 @@ export const AssignmentActions = ({
     try {
       setIsLoading(true);
       await axios.delete(
-        `/api/courses/${courseId}/milestones/${milestoneId}/${assignmentId}`
+        `/api/courses/${courseId}/milestones/${milestoneId}/assignment/${assignmentId}`
       );
       toast.success("Assignment deleted");
       router.refresh();
-      {
-        milestoneId;
-      }
     } catch {
       toast.error("Something went wrong");
     } finally {
@@ -67,7 +64,7 @@ export const AssignmentActions = ({
   };
 
   return (
-    <div className="flex items-center gap-x-2">
+    <div className="flex items-center gap-x-2 ml-auto">
       <Button
         className={`${
           isPublished

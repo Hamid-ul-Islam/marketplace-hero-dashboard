@@ -51,7 +51,7 @@ export const MilestoneActions = ({
     try {
       setIsLoading(true);
       await axios.delete(`/api/courses/${courseId}/milestones/${milestoneId}`);
-      toast.success("Chapter deleted");
+      toast.success("Milestone deleted");
       router.refresh();
       router.push(`/api/courses/${courseId}/milestones/${milestoneId}`);
     } catch {
