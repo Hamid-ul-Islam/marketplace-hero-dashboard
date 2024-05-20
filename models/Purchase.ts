@@ -3,10 +3,14 @@ import { model, models, Schema } from "mongoose";
 const purchaseSchema = new Schema(
   {
     courseId: {
-      type: Schema.Types.ObjectId,
-      ref: "Course",
+      type: String,
+      required: true,
     },
     userId: String,
+    coupon: {
+      type: Schema.Types.ObjectId,
+      ref: "Coupon",
+    },
     paymentId: String,
     paymentMethod: String,
   },

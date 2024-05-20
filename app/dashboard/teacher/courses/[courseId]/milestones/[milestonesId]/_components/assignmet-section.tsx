@@ -49,6 +49,7 @@ export default function AssignmentSection({
             disabled={!assignment?._id}
             milestoneId={milestoneId}
             courseId={courseId}
+            setIsCreating={setIsCreating}
           />
         )}
 

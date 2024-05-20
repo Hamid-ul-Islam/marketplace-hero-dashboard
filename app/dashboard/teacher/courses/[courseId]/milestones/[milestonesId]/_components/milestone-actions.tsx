@@ -53,7 +53,7 @@ export const MilestoneActions = ({
       await axios.delete(`/api/courses/${courseId}/milestones/${milestoneId}`);
       toast.success("Milestone deleted");
       router.refresh();
-      router.push(`/api/courses/${courseId}/milestones/${milestoneId}`);
+      router.push(`/dashboard/teacher/courses/${courseId}`);
     } catch {
       toast.error("Something went wrong");
     } finally {

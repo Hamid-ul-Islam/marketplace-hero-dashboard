@@ -14,6 +14,7 @@ interface AssignmentActionsProps {
   isPublished: boolean;
   milestoneId: string;
   courseId: string;
+  setIsCreating: (value: boolean) => void;
 }
 
 export const AssignmentActions = ({
@@ -22,6 +23,7 @@ export const AssignmentActions = ({
   milestoneId,
   courseId,
   disabled,
+  setIsCreating,
 }: AssignmentActionsProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +57,7 @@ export const AssignmentActions = ({
         `/api/courses/${courseId}/milestones/${milestoneId}/assignment/${assignmentId}`
       );
       toast.success("Assignment deleted");
+      setIsCreating(false);
       router.refresh();
     } catch {
       toast.error("Something went wrong");

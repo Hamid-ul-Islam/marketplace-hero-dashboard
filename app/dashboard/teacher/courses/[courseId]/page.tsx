@@ -4,7 +4,9 @@ import {
   File,
   LayoutDashboard,
   ListChecks,
+  BadgeCent,
   Milestone as MilestoneIcon,
+  BadgePercent,
 } from "lucide-react";
 
 import { IconBadge } from "@/components/icon-badge";
@@ -23,6 +25,8 @@ import { connectDB } from "@/lib/db";
 import Course from "@/models/Course";
 import { MilestonesForm } from "./_components/milestones-form";
 import Milestone from "@/models/Milestone";
+import CouponForm from "./_components/coupon-form";
+import Coupon from "@/models/Coupon";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   await connectDB();
@@ -35,34 +39,20 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   //find course
   const course = await Course.findById(params.courseId);
 
+  //find coupons in reverse order created at
+  const coupons = await Coupon.find({ courseId: params.courseId }).sort({
+    createdAt: -1,
+  });
+
+
   //find milestones
   const milestones = await Milestone.find({ courseId: params.courseId }).sort({
     position: 1,
   });
 
-  // const categories = await Course.findMany({
-  //   orderBy: {
-  //     name: "asc",
-  //   },
-  // });
-
   if (!course) {
     return redirect("/");
   }
-
-  // const requiredFields = [
-  //   course.title,
-  //   course.description,
-  //   course.imageUrl,
-  //   course.price,
-  //   course.categoryId,
-  //   course.chapters.some((chapter) => chapter.isPublished),
-  // ];
-
-  // const totalFields = requiredFields.length;
-  // const completedFields = requiredFields.filter(Boolean).length;
-
-  // const completionText = `(${completedFields} / ${totalFields})`;
 
   const isComplete = course.isCompleted;
 
@@ -75,9 +65,9 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2">
             <h1 className="text-2xl font-medium">Course setup</h1>
-            <span className="text-sm text-slate-700">
+            <span className="text-sm text-slate-700 font-medium">
               {/* Complete all fields {completionText} */}
-              Complete all fields 5
+              {course.title}
             </span>
           </div>
           <Actions
@@ -95,7 +85,6 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <TitleForm initialData={course} courseId={course._id} />
             <DescriptionForm initialData={course} courseId={course._id} />
             <ImageForm initialData={course} courseId={course._id} />
-
           </div>
           <div className="space-y-6">
             <div>
@@ -114,10 +103,11 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             </div>
             <div>
               <div className="flex items-center gap-x-2">
-                <IconBadge icon={File} />
-                <h2 className="text-xl">Resources & Attachments</h2>
+                <IconBadge icon={BadgePercent} />
+                <h2 className="text-xl">Coupons and Discounts</h2>
               </div>
-              <AttachmentForm initialData={course} courseId={course._id} />
+              <CouponForm initialData={coupons} courseId={course._id} />
+              {/* <AttachmentForm initialData={course} courseId={course._id} /> */}
             </div>
           </div>
         </div>

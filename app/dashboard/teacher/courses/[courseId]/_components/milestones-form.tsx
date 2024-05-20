@@ -5,7 +5,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Loader2, PlusCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -37,6 +37,10 @@ export const MilestonesForm = ({
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [milestoneData, setMilestoneData] = useState(milestones || []);
+  
+  useEffect(() => {
+    setMilestoneData(milestones);
+  }, [milestones]);
 
   const toggleCreating = () => {
     setIsCreating((current) => !current);
@@ -140,15 +144,18 @@ export const MilestonesForm = ({
         <div
           className={cn(
             "text-sm mt-2",
-            !milestones?.length && "text-slate-500 italic"
+            !milestoneData?.length && "text-slate-500 italic"
           )}
         >
-          {!milestones?.length && "No Milestones"}
-          <MilestonesList
-            onEdit={onEdit}
-            onReorder={onReorder}
-            items={milestoneData || []}
-          />
+          {milestoneData?.length ? (
+            <MilestonesList
+              onEdit={onEdit}
+              onReorder={onReorder}
+              items={milestoneData || []}
+            />
+          ) : (
+            "No Milestones"
+          )}
         </div>
       )}
       {!isCreating && (

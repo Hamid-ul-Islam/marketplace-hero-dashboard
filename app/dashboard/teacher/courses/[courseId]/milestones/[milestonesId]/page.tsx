@@ -84,8 +84,8 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
                 <h1 className="text-2xl font-medium">Milestone Setup</h1>
               </div>
             </div>
-            <span className="text-sm text-slate-700 dark:text-slate-300 ">
-              Complete all fields
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-300 ">
+              {milestone.title}
             </span>
           </div>
           <MilestoneActions
@@ -114,11 +114,10 @@ const MilestonesEditPage: React.FC<ChapterIdPageProps> = async ({ params }) => {
                 courseId={params.courseId}
                 milestoneId={params.milestonesId}
               />
-            </div>          
-              <AssignmentSection
-                {...{ courseId, milestoneId: milestonesId, assignment }}
-              />
-           
+            </div>
+            <AssignmentSection
+              {...{ courseId, milestoneId: milestonesId, assignment }}
+            />
           </div>
           <div className="space-y-4">
             <div className="flex items-center gap-x-2">

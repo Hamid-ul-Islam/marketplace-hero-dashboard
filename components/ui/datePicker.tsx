@@ -47,7 +47,7 @@ export function DatePickerWithPresets({ value, onChange, disabled }: Props) {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick due date</span>}
+          {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent

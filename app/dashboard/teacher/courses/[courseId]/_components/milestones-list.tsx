@@ -46,9 +46,9 @@ export const MilestonesList = ({
 
     setMilestones(items);
 
-    const bulkUpdateData = updatedMilestones.map((milestone) => ({
+    const bulkUpdateData = updatedMilestones.map((milestone: any) => ({
       id: milestone._id,
-      position: items.findIndex((item) => item._id === milestone._id),
+      position: items.findIndex((item: any) => item._id === milestone._id),
     }));
 
     onReorder(bulkUpdateData);
@@ -62,7 +62,7 @@ export const MilestonesList = ({
       <Droppable droppableId="milestones">
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
-            {milestones.map((milestone, index) => (
+            {milestones.map((milestone: any, index: number) => (
               <Draggable
                 key={milestone._id}
                 draggableId={milestone._id}
