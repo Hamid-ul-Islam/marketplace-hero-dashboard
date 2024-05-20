@@ -143,8 +143,10 @@ export const LectureEditForm = ({
           <div className="flex flex-col-reverse lg:flex-row items-center justify-between">
             {
               <div className="font-medium pr-2 pb-2 sm:pr-0 sm:pb-0 sm:font-normal">
-                {lectureData.title || (
-                  <span className="italic text-slate-500">Lecture deleted</span>
+                {lectureData.length < 0 && (
+                  <span className="text-sm italic text-slate-500">
+                    No Lectures
+                  </span>
                 )}
               </div>
             }
