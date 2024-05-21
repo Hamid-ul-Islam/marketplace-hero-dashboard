@@ -141,7 +141,7 @@ export const couponColumns: ColumnDef<any>[] = [
                 <Pencil className="h-4 w-4 mr-2" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="border border-slate-500 bg-slate-100 rounded-md p-4 dark:bg-gray-800">
+            <PopoverContent className="border dark:border-slate-500 bg-slate-100 rounded-md p-4 dark:bg-gray-800">
               <CouponEditForm
                 initialData={initialData}
                 courseId={courseId}

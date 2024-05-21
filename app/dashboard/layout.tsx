@@ -12,7 +12,7 @@ export default function DashboardLayout({
 }) {
   return (
     <main>
-      <div className="h-full dark:bg-gray-900">
+      <section className="h-full dark:bg-gray-900">
         <div className="h-[80px] md:pl-56 fixed inset-y-0 w-full z-50 dark:bg-gray-900">
           <Navbar />
         </div>
@@ -22,14 +22,14 @@ export default function DashboardLayout({
         </div>
         {/* pt or pull top pushes the content down accounting for the height of the navbar  
             1:26:33 / 10:41:03 - https://youtu.be/Big_aFLmekI?si=P2rTnadq2IYS_90F */}
-        <main className="md:pl-56 pt-[80px] h-full dark:bg-gray-900">
+        <div className="md:pl-56 pt-[80px] h-full dark:bg-gray-900">
           <ThemeContextProvider>
-          <ToastProvider />
-          {children}
-          <ThemeSwitch />
+            <ToastProvider />
+            {children}
+            <ThemeSwitch />
           </ThemeContextProvider>
-        </main>
-      </div>
+        </div>
+      </section>
     </main>
   );
 }
