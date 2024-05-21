@@ -143,15 +143,6 @@ export const LectureEditForm = ({
                 {initialData.title}
               </span>
             }
-            {
-              <div className="font-medium pr-2 pb-2 sm:pr-0 sm:pb-0 sm:font-normal">
-                {initialData?.length < 0 && (
-                  <span className="text-sm italic text-slate-500">
-                    No Lectures
-                  </span>
-                )}
-              </div>
-            }
             <div className="flex items-center">
               <Eye
                 onClick={togglePreview}
