@@ -116,7 +116,7 @@ export const MilestonesList = ({
                                                 }
                                                 `}
                       >
-                        {milestone.isPublished ? "Published" : "Draft"}
+                        {milestone.isPublished ? "Published" : "Unpublished"}
                       </Badge>
                       <Pencil
                         onClick={() => onEdit(milestone._id)}
