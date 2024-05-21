@@ -108,16 +108,20 @@ export const couponColumns: ColumnDef<any>[] = [
     },
     cell: ({ row }) => {
       const hasValidity = new Date(row.getValue("expirationDate")) > new Date();
+      const hasUsageLimit = row.original.usageLimit > row.original.usageCount;
 
       return (
         <Badge
           className={cn(
             "bg-red-100 text-red-600 hover:text-red-400 hover:bg-red-100",
             hasValidity &&
+              hasUsageLimit &&
               "bg-green-100 text-green-600 hover:text-green-400 hover:bg-green-100 "
           )}
         >
-          {hasValidity ? "Valid" : "Expired"}
+          {hasValidity && !hasUsageLimit && "Limit Exceeded"}
+          {hasValidity && hasUsageLimit && "Valid"}
+          {!hasValidity && "Expired"}
         </Badge>
       );
     },
