@@ -31,7 +31,6 @@ interface LectureEditFormProps {
   };
   courseId: string;
   milestoneId: string;
-  setLectures: (data: any) => void;
 }
 
 const formSchema = z.object({
@@ -45,20 +44,19 @@ export const LectureEditForm = ({
   initialData,
   courseId,
   milestoneId,
-  setLectures,
 }: LectureEditFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [lectureData, setLectureData] = useState<any>(initialData);
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const router = useRouter();
+
   const togglePreview = () => setIsPreviewing((current) => !current);
 
   useEffect(() => {
     setLectureData(initialData);
   }, [initialData]);
-
-  const router = useRouter();
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -71,14 +69,12 @@ export const LectureEditForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(
-        `/api/courses/${courseId}/milestones/${milestoneId}/lecture/${lectureData._id}`,
+      const { data } = await axios.patch(
+        `/api/courses/${courseId}/milestones/${milestoneId}/lecture/${initialData._id}`,
         values
       );
-
       router.refresh();
       toast.success("Lecture updated");
-
       toggleEdit();
     } catch (error: any) {
       toast.error(`Error: ${error.message}`);
@@ -97,8 +93,9 @@ export const LectureEditForm = ({
         const res = await axios.patch(
           `/api/courses/${courseId}/milestones/${milestoneId}/lecture/${lectureId}/unpublish`
         );
-        setLectureData(res.data);
+        // setLectureData(res.data);
         router.refresh();
+
         toast.success("Lecture unpublished");
         return;
       }
@@ -106,7 +103,8 @@ export const LectureEditForm = ({
       const res = await axios.patch(
         `/api/courses/${courseId}/milestones/${milestoneId}/lecture/${lectureId}/publish`
       );
-      setLectureData(res.data);
+      // setLectureData(res.data);
+
       router.refresh();
       toast.success("Lecture published");
     } catch (error: any) {
@@ -120,14 +118,13 @@ export const LectureEditForm = ({
       await axios.delete(
         `/api/courses/${courseId}/milestones/${milestoneId}/lecture/${lectureId}`
       );
-      toast.success("Assignment deleted");
-      setLectures((lectures: any) =>
-        lectures.filter((lecture: any) => lecture._id !== lectureId)
-      );
+
+      toast.success("Lecture deleted");
     } catch {
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
+      router.refresh();
     }
   };
 
@@ -143,12 +140,12 @@ export const LectureEditForm = ({
           <div className="flex flex-col-reverse lg:flex-row items-center justify-between">
             {
               <span className="w-full overflow-hidden">
-                {lectureData.title}
+                {initialData.title}
               </span>
             }
             {
               <div className="font-medium pr-2 pb-2 sm:pr-0 sm:pb-0 sm:font-normal">
-                {lectureData.length < 0 && (
+                {initialData?.length < 0 && (
                   <span className="text-sm italic text-slate-500">
                     No Lectures
                   </span>
@@ -160,23 +157,23 @@ export const LectureEditForm = ({
                 onClick={togglePreview}
                 className="h-6 w-6 mr-2 cursor-pointer"
               />
-              <ConfirmModal onConfirm={() => onDeleteLecture(lectureData._id)}>
+              <ConfirmModal onConfirm={() => onDeleteLecture(initialData._id)}>
                 <Trash className="w-6 h-6 mr-2 cursor-pointer bg-red-100 rounded-md p-1 text-red-600" />
               </ConfirmModal>
               <Badge
                 onClick={() =>
                   togglePublishLecture({
-                    lectureId: lectureData._id,
-                    isPublished: lectureData.isPublished,
+                    lectureId: initialData._id,
+                    isPublished: initialData.isPublished,
                   })
                 }
                 className={`border  cursor-pointer ${
-                  lectureData.isPublished
+                  initialData.isPublished
                     ? " bg-green-100 text-green-600 hover:text-green-400 hover:bg-green-100 "
                     : " bg-red-100 text-red-600 hover:text-red-400 hover:bg-red-100 "
                 } `}
               >
-                {lectureData.isPublished ? "Published" : "Unpublished"}
+                {initialData.isPublished ? "Published" : "Unpublished"}
               </Badge>
 
               <Button

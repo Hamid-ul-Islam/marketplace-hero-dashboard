@@ -49,7 +49,7 @@ export const LectureVideoForm = ({
 }: LectureVideoFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [lectureData, setLectureData] = useState(lecture || []);
+  // const [lectureData, setLectureData] = useState(lecture || []);
 
   const toggleCreating = () => {
     setIsCreating((current) => !current);
@@ -70,13 +70,15 @@ export const LectureVideoForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const datas = await axios.post(
-        `/api/courses/${courseId}/milestones/${milestoneId}/lecture/lecturId`,
+        `/api/courses/${courseId}/milestones/${milestoneId}/lecture/`,
         values
       );
-      toast.success("Milestones created");
+
+      router.refresh();
+      toast.success("Lecture created");
       toggleCreating();
-      console.log(datas.data);
-      setLectureData((prev: typeof lectureData) => [...prev, datas.data]);
+      // console.log(datas.data);
+      // setLectureData((prev: typeof lectureData) => [...prev, datas.data]);
     } catch {
       toast.error("Something went wrong");
     }
@@ -92,8 +94,8 @@ export const LectureVideoForm = ({
           list: updateData,
         }
       );
-      toast.success("Lectures reordered");
       router.refresh();
+      toast.success("Lectures reordered");
     } catch {
       toast.error("Something went wrong");
     } finally {
@@ -169,15 +171,12 @@ export const LectureVideoForm = ({
       )}
       {!isCreating && (
         <div
-          className={cn(
-            "text-sm",
-            !lectureData?.length && "text-slate-500 italic"
-          )}
+          className={cn("text-sm", !lecture?.length && "text-slate-500 italic")}
         >
-          {!lectureData?.length && "No Lectures"}
+          {!lecture?.length && "No Lectures"}
           <LecturessList
             onReorder={onReorder}
-            item={lectureData}
+            item={lecture}
             courseId={courseId}
             milestoneId={milestoneId}
           />
