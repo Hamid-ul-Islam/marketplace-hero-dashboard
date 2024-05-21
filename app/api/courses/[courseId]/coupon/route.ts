@@ -43,3 +43,53 @@ export async function POST(
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
+// update/patch coupon
+export async function PATCH(
+  req: Request,
+  { params }: { params: { courseId: string } }
+) {
+  const { userId } = auth();
+  const values = await req.json();
+  const { couponId } = values;
+  if (!userId) {
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
+
+  await connectDB();
+
+  try {
+    const coupon = await Coupon.findByIdAndUpdate(couponId, values, {
+      new: true,
+    });
+    return NextResponse.json(coupon);
+  } catch (error) {
+    console.log("[COUPON_PATCH]", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
+// delete coupon
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { courseId: string } }
+) {
+  const { userId } = auth();
+  const couponId = req.url.split("=").pop();
+
+  if (!userId) {
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
+
+  await connectDB();
+
+  try {
+    const coupon = await Coupon.findByIdAndDelete(couponId);
+
+    return NextResponse.json(coupon);
+  } catch (error) {
+    console.log("[COUPON_DELETE]", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
