@@ -70,8 +70,8 @@ export default function CouponEditForm({
         toast.success("Coupon created");
         toggleEdit();
       } else {
-        values.couponId = _id;
-        await axios.patch(`/api/courses/${courseId}/coupon`, values);
+        const newValues = { ...values, couponId: _id };
+        await axios.patch(`/api/courses/${courseId}/coupon`, newValues);
         toast.success("Coupon updated");
       }
       router.refresh();
