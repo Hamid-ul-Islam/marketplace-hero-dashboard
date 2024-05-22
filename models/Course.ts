@@ -1,26 +1,17 @@
 import { model, models, Schema } from "mongoose";
+import slugify from "slugify";
 
 const courseSchema = new Schema(
   {
-    title: String,
+    title: { type: String, required: true },
     description: String,
     price: Number,
     isPublished: { type: Boolean, default: false },
-    imageUrl: [String],
-
+    coverImage: String,
     userId: String,
-
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-    milestones: {
-      type: Schema.Types.ObjectId,
-      ref: "Milestone",
-    },
-    purchases: {
-      type: Schema.Types.ObjectId,
-      ref: "Purchase",
+    slug: {
+      type: String,
+      unique: true,
     },
   },
   {
@@ -28,5 +19,31 @@ const courseSchema = new Schema(
     versionKey: false,
   }
 );
+
+// Pre-save middleware to generate slug
+courseSchema.pre("save", async function (next) {
+  if (this.isModified("title") || this.isNew) {
+    try {
+      this.slug = await generateUniqueSlug(this, this.title);
+    } catch (error) {
+      return next(Error("Internal Server Error"));
+    }
+  }
+  next();
+});
+
+async function generateUniqueSlug(course: any, title: string) {
+  let slug = slugify(title, { lower: true, strict: true });
+  let uniqueSlug = slug;
+  let counter = 1;
+
+  // Check if the generated slug already exists
+  while (await models.Course.findOne({ slug: uniqueSlug })) {
+    uniqueSlug = `${slug}-${counter}`;
+    counter++;
+  }
+
+  return uniqueSlug;
+}
 
 export default models.Course || model("Course", courseSchema);

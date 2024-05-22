@@ -18,9 +18,7 @@ interface ImageFormProps {
 }
 
 const formSchema = z.object({
-  imageUrl: z.string().min(1, {
-    message: "Image is required",
-  }),
+  coverImage: z.string(),
 });
 
 export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
@@ -30,7 +28,6 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
 
   const router = useRouter();
 
-  console.log(initialData.imageUrl[0]);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
@@ -48,13 +45,13 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
         Course image
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing && <>Cancel</>}
-          {!isEditing && !initialData.imageUrl[0] && (
+          {!isEditing && !initialData.coverImage && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
               Add an image
             </>
           )}
-          {!isEditing && initialData.imageUrl[0] && (
+          {!isEditing && initialData.coverImage && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
               Edit image
@@ -63,7 +60,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
         </Button>
       </div>
       {!isEditing &&
-        (!initialData.imageUrl ? (
+        (!initialData.coverImage ? (
           <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
             <ImageIcon className="h-10 w-10 text-slate-500" />
           </div>
@@ -73,17 +70,17 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
               alt="Upload"
               fill
               className="object-cover rounded-md"
-              src={initialData.imageUrl[0]}
+              src={initialData.coverImage}
             />
           </div>
         ))}
       {isEditing && (
-        <div>
+        <div className="">
           <FileUpload
             endpoint="courseImage"
             onChange={(url) => {
               if (url) {
-                onSubmit({ imageUrl: url });
+                onSubmit({ coverImage: url });
               }
             }}
           />

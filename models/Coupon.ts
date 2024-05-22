@@ -47,11 +47,12 @@ const couponSchema = new Schema(
   }
 );
 
-couponSchema.methods.isValid = function () {
+couponSchema.methods.isValid = function (courseId: string) {
   const now = new Date();
   return (
     this.expirationDate > now &&
-    (this.usageLimit === 0 || this.usageCount < this.usageLimit)
+    (this.usageLimit === 0 || this.usageCount < this.usageLimit) &&
+    this.courseId === courseId
   );
 };
 
